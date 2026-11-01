@@ -1,0 +1,6 @@
+build/
+*.dmg
+.DS_Store
+.proto/
+_bmad/
+_bmad-output/
