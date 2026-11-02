@@ -17,9 +17,12 @@ enum CoreTestRunner {
         run("hashes clipboard flavors deterministically") { try hashChecks() }
         run("tracks clipboard and screenshot stability") { try monitorGateChecks() }
         run("routes history filters and keyboard commands") { try navigationAndFilterChecks() }
+        run("reuses cached history preview images") { try historyPreviewCacheChecks() }
+        run("derives native menu state simply") { try menuBarPresentationChecks() }
         run("only reads and stores changed clipboard states") { try clipboardMonitorChecks() }
         run("pauses and resumes clipboard polling") { try clipboardMonitorLifecycleChecks() }
         run("captures stable screenshots once") { try screenshotMonitorChecks() }
+        run("coalesces screenshot event and retry work") { try screenshotWorkCoalescingChecks() }
         run("auto-copies duplicate screenshots once") { try screenshotDuplicateAutoCopyChecks() }
         run("restores original rich clipboard flavors") { try clipboardRestoreChecks() }
         run("persists URL and file representations") { try urlAndFilePersistenceChecks() }
@@ -141,6 +144,27 @@ enum CoreTestRunner {
         try expect(HistorySelection.nextIndex(currentIndex: 0, count: 3, offset: 1) == 1, "down arrow should advance selection")
         try expect(HistorySelection.nextIndex(currentIndex: 2, count: 3, offset: 1) == 2, "selection should stop at the last result")
         try expect(HistorySelection.nextIndex(currentIndex: nil, count: 0, offset: 1) == nil, "empty history should have no selection")
+    }
+
+    private static func historyPreviewCacheChecks() throws {
+        var loadCount = 0
+        let image = NSImage(size: NSSize(width: 16, height: 16))
+        let cache = HistoryPreviewImageCache(imageLoader: { _ in
+            loadCount += 1
+            return image
+        })
+        let url = URL(fileURLWithPath: "/cache-test/preview.png")
+        let first = cache.image(for: url)
+        let second = cache.image(for: url)
+        try expect(first === image && second === image, "cached history previews should reuse the same image")
+        try expect(loadCount == 1, "repeated preview rendering should load the image once")
+    }
+
+    private static func menuBarPresentationChecks() throws {
+        try expect(MenuBarPresentation.monitoringTitle(isPaused: false) == "Pause Monitoring", "active monitoring should offer pause")
+        try expect(MenuBarPresentation.monitoringTitle(isPaused: true) == "Resume Monitoring", "paused monitoring should offer resume")
+        try expect(!MenuBarPresentation.canClearHistory(itemCount: 0), "empty history should disable clear")
+        try expect(MenuBarPresentation.canClearHistory(itemCount: 1), "nonempty history should enable clear")
     }
 
     private static func clipboardMonitorChecks() throws {
@@ -283,6 +307,47 @@ enum CoreTestRunner {
         let finalCaptureCount = captureCount
         captureLock.unlock()
         try expect(finalCaptureCount == 2 && (try store.count()) == 2, "resumed screenshot monitor should import once")
+    }
+
+    private static func screenshotWorkCoalescingChecks() throws {
+        let directory = try temporaryDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let screenshotFolder = directory.appendingPathComponent("Screenshots", isDirectory: true)
+        try FileManager.default.createDirectory(at: screenshotFolder, withIntermediateDirectories: true)
+        let screenshotURL = screenshotFolder.appendingPathComponent("Screenshot.png")
+        try makePNG().write(to: screenshotURL)
+
+        let assets = try AssetStore(rootURL: directory.appendingPathComponent("Assets", isDirectory: true))
+        let store = try SQLiteHistoryStore(databaseURL: directory.appendingPathComponent("history.sqlite"), assetStore: assets)
+        let pasteboard = NSPasteboard(name: NSPasteboard.Name("org.clipvault.tests-" + UUID().uuidString))
+        let monitor = ScreenshotMonitor(
+            store: store,
+            assetStore: assets,
+            clipboardWriter: ClipboardWriter(assetStore: assets, pasteboard: pasteboard),
+            autoCopyEnabled: { false }
+        )
+        defer { monitor.stopAndWaitForTesting() }
+
+        monitor.start(folderURL: screenshotFolder)
+        monitor.signalDirectoryEventsForTesting(100)
+        let firstScanDeadline = Date().addingTimeInterval(3)
+        while monitor.directoryScanCountForTesting() == 0 && Date() < firstScanDeadline {
+            Thread.sleep(forTimeInterval: 0.01)
+        }
+        try expect(monitor.directoryScanCountForTesting() == 1, "a directory-event burst should coalesce into one scan")
+
+        let pendingRetries = monitor.scheduleStabilityCheckBurstForTesting(
+            directory.appendingPathComponent("RetryProbe.png"),
+            count: 5
+        )
+        try expect(pendingRetries == 1, "repeated checks of one path should schedule only one delayed retry")
+
+        monitor.signalDirectoryEventsForTesting(100)
+        let secondScanDeadline = Date().addingTimeInterval(3)
+        while monitor.directoryScanCountForTesting() < 2 && Date() < secondScanDeadline {
+            Thread.sleep(forTimeInterval: 0.01)
+        }
+        try expect(monitor.directoryScanCountForTesting() == 2, "a later event burst should queue only one additional scan")
     }
 
     private static func screenshotDuplicateAutoCopyChecks() throws {

@@ -68,6 +68,9 @@ public final class ScreenshotMonitor {
     private var stability = ScreenshotStabilityTracker()
     private var attempts: [String: Int] = [:]
     private var capturedSignatures: [String: ScreenshotFileSignature] = [:]
+    private var pendingScanID: UUID?
+    private var pendingStabilityChecks: [String: UUID] = [:]
+    private var scanCount = 0
 
     public init(
         store: SQLiteHistoryStore,
@@ -103,11 +106,11 @@ public final class ScreenshotMonitor {
                     eventMask: [.write, .extend, .attrib, .rename, .delete],
                     queue: self.queue
                 )
-                watcher.setEventHandler { [weak self] in self?.scan() }
+                watcher.setEventHandler { [weak self] in self?.scheduleScan() }
                 watcher.setCancelHandler { Darwin.close(fd) }
                 self.directorySource = watcher
                 watcher.resume()
-                self.scan()
+                self.scheduleScan()
             } catch {
                 self.watchedFolder = nil
                 self.onError(error)
@@ -123,18 +126,52 @@ public final class ScreenshotMonitor {
         queue.sync { stopOnQueue() }
     }
 
+    func signalDirectoryEventsForTesting(_ count: Int) {
+        queue.sync {
+            for _ in 0..<max(0, count) { scheduleScan() }
+        }
+    }
+
+    func directoryScanCountForTesting() -> Int {
+        queue.sync { scanCount }
+    }
+
+    func scheduleStabilityCheckBurstForTesting(_ url: URL, count: Int) -> Int {
+        queue.sync {
+            var scheduled = 0
+            for _ in 0..<max(0, count) {
+                if scheduleStabilityCheck(for: url, path: url.path) { scheduled += 1 }
+            }
+            return scheduled
+        }
+    }
+
     private func stopOnQueue() {
         directorySource?.setEventHandler {}
         directorySource?.cancel()
         directorySource = nil
         descriptor = nil
         watchedFolder = nil
+        pendingScanID = nil
+        pendingStabilityChecks.removeAll()
         stability = ScreenshotStabilityTracker()
         attempts.removeAll()
     }
 
+    private func scheduleScan() {
+        guard watchedFolder != nil, pendingScanID == nil else { return }
+        let requestID = UUID()
+        pendingScanID = requestID
+        queue.asyncAfter(deadline: .now() + .milliseconds(250)) { [weak self] in
+            guard let self, self.pendingScanID == requestID else { return }
+            self.pendingScanID = nil
+            self.scan()
+        }
+    }
+
     private func scan() {
         guard let folder = watchedFolder else { return }
+        scanCount += 1
         do {
             let files = try fileManager.contentsOfDirectory(
                 at: folder,
@@ -159,10 +196,12 @@ public final class ScreenshotMonitor {
             let path = url.path
             guard capturedSignatures[path] != signature else { return }
             if stability.observe(path: path, signature: signature) {
+                pendingStabilityChecks.removeValue(forKey: path)
                 importStableImage(url, signature: signature)
                 stability.remove(path: path)
                 attempts.removeValue(forKey: path)
             } else {
+                guard pendingStabilityChecks[path] == nil else { return }
                 let count = attempts[path, default: 0] + 1
                 attempts[path] = count
                 if count > 120 {
@@ -170,13 +209,24 @@ public final class ScreenshotMonitor {
                     attempts.removeValue(forKey: path)
                     return
                 }
-                queue.asyncAfter(deadline: .now() + .milliseconds(350)) { [weak self] in
-                    self?.checkForStability(url)
-                }
+                scheduleStabilityCheck(for: url, path: path)
             }
         } catch {
             onError(ScreenshotMonitorError.fileUnreadable)
         }
+    }
+
+    @discardableResult
+    private func scheduleStabilityCheck(for url: URL, path: String) -> Bool {
+        guard pendingStabilityChecks[path] == nil else { return false }
+        let requestID = UUID()
+        pendingStabilityChecks[path] = requestID
+        queue.asyncAfter(deadline: .now() + .milliseconds(350)) { [weak self] in
+            guard let self, self.pendingStabilityChecks[path] == requestID else { return }
+            self.pendingStabilityChecks.removeValue(forKey: path)
+            self.checkForStability(url)
+        }
+        return true
     }
 
     private func importStableImage(_ url: URL, signature: ScreenshotFileSignature) {

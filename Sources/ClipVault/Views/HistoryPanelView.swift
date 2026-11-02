@@ -422,7 +422,8 @@ private struct HistoryItemRow: View {
     @ViewBuilder
     private var preview: some View {
         if let assetStore, let path = item.previewAssetPath,
-           let url = try? assetStore.url(for: path), let image = NSImage(contentsOf: url) {
+           let url = try? assetStore.url(for: path),
+           let image = HistoryPreviewImageCache.shared.image(for: url) {
             Image(nsImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
@@ -448,39 +449,24 @@ private struct HistoryItemRow: View {
     }
 }
 
-public struct MenuBarMenuView: View {
-    @ObservedObject private var model: AppModel
-    @ObservedObject private var preferences: AppPreferences
-    @State private var confirmsClear = false
+final class HistoryPreviewImageCache {
+    static let shared = HistoryPreviewImageCache()
 
-    public init(model: AppModel) {
-        self.model = model
-        self.preferences = model.preferences
+    private let images = NSCache<NSURL, NSImage>()
+    private let imageLoader: (URL) -> NSImage?
+
+    init(imageLoader: @escaping (URL) -> NSImage? = { NSImage(contentsOf: $0) }) {
+        self.imageLoader = imageLoader
+        images.countLimit = 32
+        images.totalCostLimit = 12 * 1024 * 1024
     }
 
-    public var body: some View {
-        Group {
-            Button("Open Clipboard History") { model.openHistory() }
-            Button(preferences.monitoringPaused ? "Resume Monitoring" : "Pause Monitoring") {
-                model.setMonitoringPaused(!preferences.monitoringPaused)
-            }
-            Button("Clear History…", role: .destructive) { confirmsClear = true }
-                .disabled(model.itemCount == 0)
-            Divider()
-            Button("Settings…") {
-                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-            }
-            Button("Quit ClipVault") { NSApp.terminate(nil) }
-        }
-        .confirmationDialog(
-            "Clear all clipboard history?",
-            isPresented: $confirmsClear,
-            titleVisibility: .visible
-        ) {
-            Button("Clear History", role: .destructive) { model.clearHistory() }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("This removes saved items and their local assets, including pinned items.")
-        }
+    func image(for url: URL) -> NSImage? {
+        let key = url as NSURL
+        if let image = images.object(forKey: key) { return image }
+        guard let image = imageLoader(url) else { return nil }
+        let estimatedCost = max(1, Int(image.size.width * image.size.height * 4))
+        images.setObject(image, forKey: key, cost: estimatedCost)
+        return image
     }
 }

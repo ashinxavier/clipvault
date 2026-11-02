@@ -10,18 +10,6 @@ struct ClipVaultApp: App {
     }
 
     var body: some Scene {
-        MenuBarExtra(
-            isInserted: Binding(
-                get: { model.preferences.showMenuBarIcon },
-                set: { model.preferences.showMenuBarIcon = $0 }
-            )
-        ) {
-            MenuBarMenuView(model: model)
-        } label: {
-            Label("ClipVault", systemImage: "clipboard")
-        }
-        .menuBarExtraStyle(.menu)
-
         Settings {
             SettingsView(model: model)
         }

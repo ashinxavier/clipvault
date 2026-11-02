@@ -40,7 +40,6 @@ public final class AppModel: ObservableObject {
     @Published public private(set) var itemCount = 0
     @Published public private(set) var storageUsageBytes: Int64 = 0
     @Published public private(set) var shortcutAvailable = true
-    @Published public private(set) var showMenuBarIcon = true
 
     public var onOpenHistory: (() -> Void)?
     public var onCloseHistory: (() -> Void)?
@@ -56,7 +55,6 @@ public final class AppModel: ObservableObject {
 
     public init(preferences: AppPreferences? = nil) {
         self.preferences = preferences ?? AppPreferences()
-        self.showMenuBarIcon = self.preferences.showMenuBarIcon
         observePreferences()
     }
 
@@ -329,12 +327,6 @@ public final class AppModel: ObservableObject {
             }
         }
         .store(in: &cancellables)
-        preferences.$showMenuBarIcon
-            .dropFirst()
-            .sink { [weak self] value in
-                DispatchQueue.main.async { [weak self] in self?.showMenuBarIcon = value }
-            }
-            .store(in: &cancellables)
         preferences.$shortcut
             .dropFirst()
             .sink { [weak self] _ in DispatchQueue.main.async { self?.updateShortcut() } }
