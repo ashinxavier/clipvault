@@ -84,7 +84,7 @@ public struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 470)
+        .frame(width: 550, height: 560)
         .padding(.vertical, 8)
         .fileImporter(
             isPresented: $choosingFolder,
