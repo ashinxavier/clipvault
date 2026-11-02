@@ -43,6 +43,7 @@ public final class AppModel: ObservableObject {
 
     public var onOpenHistory: (() -> Void)?
     public var onCloseHistory: (() -> Void)?
+    public var onOpenSettings: (() -> Void)?
 
     private var clipboardMonitor: ClipboardMonitor?
     private var screenshotMonitor: ScreenshotMonitor?
@@ -103,6 +104,10 @@ public final class AppModel: ObservableObject {
 
     public func closeHistory() {
         onCloseHistory?()
+    }
+
+    public func openSettings() {
+        onOpenSettings?()
     }
 
     public func reloadHistory() {

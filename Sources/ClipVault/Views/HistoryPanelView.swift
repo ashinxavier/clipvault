@@ -85,7 +85,7 @@ public struct HistoryPanelView: View {
             .buttonStyle(.borderless)
             .help(preferences.monitoringPaused ? "Resume monitoring" : "Pause monitoring")
             Button {
-                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                model.openSettings()
             } label: {
                 Image(systemName: "gearshape")
             }

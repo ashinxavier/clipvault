@@ -163,6 +163,9 @@ enum CoreTestRunner {
     private static func menuBarPresentationChecks() throws {
         try expect(MenuBarPresentation.monitoringTitle(isPaused: false) == "Pause Monitoring", "active monitoring should offer pause")
         try expect(MenuBarPresentation.monitoringTitle(isPaused: true) == "Resume Monitoring", "paused monitoring should offer resume")
+        try expect(MenuBarPresentation.monitoringSymbol(isPaused: false) == "pause.fill", "active monitoring should use the pause symbol")
+        try expect(MenuBarPresentation.monitoringSymbol(isPaused: true) == "play.fill", "paused monitoring should use the play symbol")
+        try expect(MenuBarPresentation.historySymbol == "clock.arrow.circlepath", "history should use a history symbol")
         try expect(!MenuBarPresentation.canClearHistory(itemCount: 0), "empty history should disable clear")
         try expect(MenuBarPresentation.canClearHistory(itemCount: 1), "nonempty history should enable clear")
     }
