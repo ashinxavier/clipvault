@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClipVault - a local-first clipboard manager for macOS</title>
+<meta name="description" content="ClipVault keeps everything you copy on your Mac, searchable from the menu bar. No account, no sync, no analytics, no network.">
+<link rel="icon" type="image/png" href="assets/icon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <img src="assets/icon.png" alt="ClipVault icon" class="brand-icon">
+      <span>ClipVault</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#screenshots">Screenshots</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#install">Install</a>
+    </div>
+    <a class="btn btn-dark btn-sm" href="https://github.com/ashinxavier/clipvault">
+      <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+      View on GitHub
+    </a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-copy">
+    <span class="badge"><span class="badge-dot"></span>Free &amp; open source &middot; MIT license</span>
+    <h1>Everything you copy,<br><img src="assets/icon.png" alt="" class="h1-chip"> <em>remembered.</em></h1>
+    <p class="lede">ClipVault is a local-first clipboard manager for macOS. Your whole copy history, searchable from the menu bar. No account. No sync. No analytics. No network.</p>
+    <div class="cta-row">
+      <a class="btn btn-dark" href="https://github.com/ashinxavier/clipvault">
+        <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        Get the source
+        <span class="btn-arrow">&rarr;</span>
+      </a>
+      <a class="btn btn-light" href="#install">Build from source</a>
+    </div>
+    <p class="meta">macOS 14 or later &middot; Apple silicon &middot; Swift 6 &middot; MIT</p>
+  </div>
+
+  <div class="hero-visual">
+    <div class="glow"></div>
+    <figure class="window hero-window">
+      <img src="assets/history-panel.jpg" alt="ClipVault history panel with search, type filters, pinned items, and relative timestamps">
+    </figure>
+  </div>
+</header>
+
+<section class="section" id="why">
+  <div class="why-grid">
+    <div class="why-card">
+      <h3>Local-first by design</h3>
+      <p>Your history lives in <code>~/Library/Application&nbsp;Support/ClipVault</code> and nowhere else. No network requests, no logging of clipboard contents.</p>
+    </div>
+    <div class="why-card">
+      <h3>One keystroke away</h3>
+      <p>Press <span class="combo"><kbd>Option</kbd> <kbd>V</kbd></span> and a floating, keyboard-friendly panel appears. No Dock icon, no window clutter.</p>
+    </div>
+    <div class="why-card">
+      <h3>Remembers more than text</h3>
+      <p>Rich text, links, file references, images, and new screenshots - each with a preview and a relative timestamp.</p>
+    </div>
+    <div class="why-card">
+      <h3>Yours to control</h3>
+      <p>Pause monitoring, toggle content types, cap history size, and clear anything or everything, pinned items included or not.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <p class="eyebrow">Features</p>
+  <h2>Built for how you <span class="dim">actually copy.</span></h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <h3><span class="fnum">01</span>Capture</h3>
+      <ul>
+        <li>Text, rich text, URLs, file references, and images - deduplicated by content, so repeats don't pile up.</li>
+        <li>Source-app metadata and previews where macOS provides them.</li>
+        <li>Watches your screenshot folder and can copy new shots straight to the clipboard.</li>
+      </ul>
+    </div>
+    <div class="feature-card">
+      <h3><span class="fnum">02</span>Find and restore</h3>
+      <ul>
+        <li>Search plus All, Text, Images, URLs, and Pinned filters.</li>
+        <li>Pin what you reuse; pins survive routine cleanup.</li>
+        <li>Restores the original content: rich text stays rich, files stay files, images stay images.</li>
+        <li>Full keyboard control - arrows, <kbd>Enter</kbd> to restore, <kbd>Esc</kbd> to close, <kbd>&#8984;</kbd> <kbd>F</kbd> to search.</li>
+      </ul>
+    </div>
+    <div class="feature-card">
+      <h3><span class="fnum">03</span>Privacy and control</h3>
+      <ul>
+        <li>Pause and resume monitoring anytime, from the panel or the menu bar.</li>
+        <li>Per-type switches for text, image, and URL/file capture.</li>
+        <li>Adjustable history limit - 500 by default, up to 5,000 - with a storage usage view.</li>
+      </ul>
+    </div>
+    <div class="feature-card">
+      <h3><span class="fnum">04</span>Fits your Mac</h3>
+      <ul>
+        <li>Menu bar app with an optional icon, system/light/dark appearance, and launch at login.</li>
+        <li>Configurable global shortcut: <span class="combo"><kbd>Option</kbd> <kbd>V</kbd></span> or <span class="combo"><kbd>Control</kbd> <kbd>Option</kbd> <kbd>V</kbd></span>.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="screenshots">
+  <p class="eyebrow">Screenshots</p>
+  <h2>Quiet by default. <span class="dim">There when you need it.</span></h2>
+  <div class="shots">
+    <figure class="window shot shot-main">
+      <img src="assets/history-panel.jpg" alt="ClipVault history panel with search, type filters, pinned items, and relative timestamps">
+      <figcaption>The history panel - search, filters, pins, timestamps</figcaption>
+    </figure>
+    <figure class="window shot">
+      <img src="assets/settings.jpg" alt="ClipVault settings window with General and Clipboard sections">
+      <figcaption>Settings - General, Clipboard, Screenshots, Storage, Privacy</figcaption>
+    </figure>
+    <figure class="window shot">
+      <img src="assets/menu-bar.jpg" alt="ClipVault menu bar menu with Open Clipboard History, Pause Monitoring, Clear History, Settings, and Quit">
+      <figcaption>The menu bar menu - everything, one click away</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section" id="shortcuts">
+  <p class="eyebrow">Keyboard shortcuts</p>
+  <h2>Never touch <span class="dim">the mouse.</span></h2>
+  <div class="keys-table">
+    <div class="key-row"><span class="keys"><kbd>Option</kbd> <kbd>V</kbd></span><span>Open history (configurable)</span></div>
+    <div class="key-row"><span class="keys"><kbd>&uarr;</kbd> <kbd>&darr;</kbd></span><span>Move selection</span></div>
+    <div class="key-row"><span class="keys"><kbd>Enter</kbd></span><span>Restore selected item to the clipboard</span></div>
+    <div class="key-row"><span class="keys"><kbd>Esc</kbd></span><span>Close the panel</span></div>
+    <div class="key-row"><span class="keys"><kbd>&#8984;</kbd> <kbd>F</kbd></span><span>Focus search</span></div>
+    <div class="key-row"><span class="keys"><kbd>Delete</kbd></span><span>Remove the selected item</span></div>
+  </div>
+</section>
+
+<section class="section" id="privacy">
+  <div class="privacy-card">
+    <div class="privacy-icon">
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <h2>Your data stays <span class="dim">on your Mac.</span></h2>
+    <p>SQLite holds history metadata; images and other binary content are stored as local files under <code>~/Library/Application&nbsp;Support/ClipVault/</code>. The data directory and files get owner-only permissions, and clipboard contents are never logged.</p>
+    <div class="privacy-points">
+      <span>No account</span>
+      <span>No sync</span>
+      <span>No analytics</span>
+      <span>No network requests</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="install">
+  <p class="eyebrow">Install</p>
+  <h2>Build it <span class="dim">from source.</span></h2>
+  <div class="install-grid">
+    <div class="terminal">
+      <div class="terminal-bar"><span></span><span></span><span></span></div>
+      <pre><code>$ git clone https://github.com/ashinxavier/clipvault
+$ cd clipvault
+$ bash Scripts/package-dmg.sh</code></pre>
+    </div>
+    <div class="install-steps">
+      <p>Open <code>build/ClipVault.dmg</code> and drag <code>ClipVault.app</code> to Applications.</p>
+      <p>The package is ad-hoc signed, so macOS blocks it on first launch. After that first attempt, open <strong>System Settings &gt; Privacy &amp; Security</strong> and click <strong>Open Anyway</strong>.</p>
+      <p class="fine">Requires macOS 14 or later on Apple silicon, Apple Command Line Tools with Swift 6.3.3, and a compatible macOS SDK.</p>
+      <a class="btn btn-dark" href="https://github.com/ashinxavier/clipvault">Open the repository<span class="btn-arrow">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <a class="brand" href="#top">
+      <img src="assets/icon.png" alt="" class="brand-icon">
+      <span>ClipVault</span>
+    </a>
+    <p>A local-first clipboard manager for macOS. Free and open source under the MIT license.</p>
+    <a href="https://github.com/ashinxavier/clipvault">github.com/ashinxavier/clipvault</a>
+  </div>
+</footer>
+
+</body>
+</html>
