@@ -161,6 +161,8 @@ enum CoreTestRunner {
     }
 
     private static func menuBarPresentationChecks() throws {
+        try expect(MenuBarPresentation.historyTitle(shortcut: .optionV) == "Open Clipboard History (Option + V)", "menu should show the default history shortcut")
+        try expect(MenuBarPresentation.historyTitle(shortcut: .controlOptionV) == "Open Clipboard History (Control + Option + V)", "menu should show the selected alternate shortcut")
         try expect(MenuBarPresentation.monitoringTitle(isPaused: false) == "Pause Monitoring", "active monitoring should offer pause")
         try expect(MenuBarPresentation.monitoringTitle(isPaused: true) == "Resume Monitoring", "paused monitoring should offer resume")
         try expect(MenuBarPresentation.monitoringSymbol(isPaused: false) == "pause.fill", "active monitoring should use the pause symbol")

@@ -24,7 +24,7 @@ Open `build/ClipVault.dmg`, then copy `ClipVault.app` to Applications. The packa
 
 1. Launch ClipVault. Its clipboard icon appears in the menu bar.
 2. Copy text, a URL, a file reference, or an image as usual.
-3. Open history from the menu bar or press **Option + V**.
+3. Open history from the menu bar or press **Option + V**. The **Open Clipboard History** menu item shows the active shortcut and updates when you change it in Settings.
 4. Search or filter the list, then select an item to restore it to the clipboard.
 5. Open **Settings** from the menu or the history panel to adjust capture and privacy preferences.
 

@@ -8,6 +8,10 @@ enum MenuBarPresentation {
     static let settingsSymbol = "gearshape"
     static let quitSymbol = "power"
 
+    static func historyTitle(shortcut: ShortcutPreset) -> String {
+        "Open Clipboard History (\(shortcut.title))"
+    }
+
     static func monitoringTitle(isPaused: Bool) -> String {
         isPaused ? "Resume Monitoring" : "Pause Monitoring"
     }
@@ -27,6 +31,7 @@ final class ClipVaultApplicationDelegate: NSObject, NSApplicationDelegate, NSMen
     private var panelController: HistoryPanelController?
     private var settingsWindowController: SettingsWindowController?
     private var statusItem: NSStatusItem?
+    private var historyMenuItem: NSMenuItem?
     private var showMenuBarIconSubscription: AnyCancellable?
     private var monitoringMenuItem: NSMenuItem?
     private var clearHistoryMenuItem: NSMenuItem?
@@ -67,6 +72,7 @@ final class ClipVaultApplicationDelegate: NSObject, NSApplicationDelegate, NSMen
     }
 
     func menuWillOpen(_ menu: NSMenu) {
+        historyMenuItem?.title = MenuBarPresentation.historyTitle(shortcut: model.preferences.shortcut)
         let isPaused = model.preferences.monitoringPaused
         monitoringMenuItem?.title = MenuBarPresentation.monitoringTitle(isPaused: isPaused)
         monitoringMenuItem?.image = isPaused ? Self.resumeMenuImage : Self.pauseMenuImage
@@ -92,11 +98,12 @@ final class ClipVaultApplicationDelegate: NSObject, NSApplicationDelegate, NSMen
             let menu = NSMenu()
             menu.delegate = self
             let historyItem = NSMenuItem(
-                title: "Open Clipboard History",
+                title: MenuBarPresentation.historyTitle(shortcut: model.preferences.shortcut),
                 action: #selector(openHistoryFromMenu(_:)),
                 keyEquivalent: ""
             )
             historyItem.image = Self.historyMenuImage
+            historyMenuItem = historyItem
             menu.addItem(historyItem)
 
             let isPaused = model.preferences.monitoringPaused
@@ -141,6 +148,7 @@ final class ClipVaultApplicationDelegate: NSObject, NSApplicationDelegate, NSMen
         } else if let item = statusItem {
             NSStatusBar.system.removeStatusItem(item)
             statusItem = nil
+            historyMenuItem = nil
             monitoringMenuItem = nil
             clearHistoryMenuItem = nil
         }
