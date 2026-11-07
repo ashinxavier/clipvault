@@ -69,7 +69,7 @@ The package is ad-hoc signed, not Developer ID signed or notarized, so macOS blo
 
 1. Launch ClipVault. Its clipboard icon appears in the menu bar.
 2. Copy text, a link, a file, or an image as usual.
-3. Press **Option + V** (or open history from the menu bar).
+3. Press **Option + V** or open history from the menu bar. The **Open Clipboard History** menu item shows the active shortcut and updates when you change it in Settings.
 4. Search or filter, then select an item to restore it to the clipboard.
 5. Open **Settings** to adjust capture, screenshots, storage, and privacy.
 
