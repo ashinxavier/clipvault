@@ -5,12 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ClipVault - a local-first clipboard manager for macOS</title>
 <meta name="description" content="ClipVault keeps everything you copy on your Mac, searchable from the menu bar. No account, no sync, no analytics, no network.">
+<meta name="theme-color" content="#f1f1f4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="assets/icon.png">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<nav class="nav">
+<nav class="nav" aria-label="Primary">
   <div class="nav-inner">
     <a class="brand" href="#top">
       <img src="assets/icon.png" alt="ClipVault icon" class="brand-icon">
@@ -29,6 +34,7 @@
   </div>
 </nav>
 
+<main id="main">
 <header class="hero" id="top">
   <div class="hero-copy">
     <span class="badge"><span class="badge-dot"></span>Free &amp; open source &middot; MIT license</span>
@@ -48,7 +54,7 @@
   <div class="hero-visual">
     <div class="glow"></div>
     <figure class="window hero-window">
-      <img src="assets/history-panel.jpg" alt="ClipVault history panel with search, type filters, pinned items, and relative timestamps">
+      <img src="assets/history-panel.jpg" alt="ClipVault history panel with search, type filters, pinned items, and relative timestamps" fetchpriority="high" decoding="async">
     </figure>
   </div>
 </header>
@@ -118,15 +124,15 @@
   <h2>Quiet by default. <span class="dim">There when you need it.</span></h2>
   <div class="shots">
     <figure class="window shot shot-main">
-      <img src="assets/history-panel.jpg" alt="ClipVault history panel with search, type filters, pinned items, and relative timestamps">
+      <img src="assets/history-panel.jpg" alt="ClipVault history panel with search, type filters, pinned items, and relative timestamps" loading="lazy" decoding="async">
       <figcaption>The history panel - search, filters, pins, timestamps</figcaption>
     </figure>
     <figure class="window shot">
-      <img src="assets/settings.jpg" alt="ClipVault settings window with General and Clipboard sections">
+      <img src="assets/settings.jpg" alt="ClipVault settings window with General and Clipboard sections" loading="lazy" decoding="async">
       <figcaption>Settings - General, Clipboard, Screenshots, Storage, Privacy</figcaption>
     </figure>
     <figure class="window shot">
-      <img src="assets/menu-bar.jpg" alt="ClipVault menu bar menu with Open Clipboard History, Pause Monitoring, Clear History, Settings, and Quit">
+      <img src="assets/menu-bar.jpg" alt="ClipVault menu bar menu with Open Clipboard History, Pause Monitoring, Clear History, Settings, and Quit" loading="lazy" decoding="async">
       <figcaption>The menu bar menu - everything, one click away</figcaption>
     </figure>
   </div>
@@ -179,6 +185,7 @@ $ bash Scripts/package-dmg.sh</code></pre>
     </div>
   </div>
 </section>
+</main>
 
 <footer class="footer">
   <div class="footer-inner">
