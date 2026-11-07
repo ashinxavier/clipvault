@@ -4,3 +4,7 @@ build/
 .proto/
 _bmad/
 _bmad-output/
+
+# Astro site dependencies and cache
+node_modules/
+.astro/

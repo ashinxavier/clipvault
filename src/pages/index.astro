@@ -1,0 +1,301 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import MotionShowcase from "../components/MotionShowcase";
+
+const base = import.meta.env.BASE_URL;
+const asset = (name: string) => `${base}assets/${name}`;
+const github = "https://github.com/ashinxavier/clipvault";
+
+const principles = [
+  {
+    title: "Local-first by design",
+    body: "Your history lives in ~/Library/Application Support/ClipVault and nowhere else. No network requests, no clipboard logging.",
+  },
+  {
+    title: "One keystroke away",
+    body: "Press Option + V to open a floating, keyboard-friendly panel. No Dock icon, no window clutter.",
+  },
+  {
+    title: "More than text",
+    body: "Rich text, links, files, images, and screenshots, each with a preview and a relative timestamp.",
+  },
+  {
+    title: "Yours to control",
+    body: "Pause monitoring, choose what to capture, cap history size, and clear items whenever you want.",
+  },
+];
+
+const features = [
+  {
+    number: "01",
+    title: "Capture",
+    items: [
+      "Text, rich text, URLs, file references, and images, deduplicated by content.",
+      "Source-app details and previews where macOS provides them.",
+      "Watches your screenshot folder and can copy new screenshots to the clipboard.",
+    ],
+  },
+  {
+    number: "02",
+    title: "Find and restore",
+    items: [
+      "Search and filter by All, Text, Images, URLs, or Pinned.",
+      "Pin what you reuse; pinned items survive routine cleanup.",
+      "Restore original content, so rich text, files, and images stay in their format.",
+      "Navigate with the keyboard: arrows, Enter, Escape, and Command + F.",
+    ],
+  },
+  {
+    number: "03",
+    title: "Privacy and control",
+    items: [
+      "Pause or resume monitoring from the panel or menu bar.",
+      "Choose whether to capture text, images, and URLs or files.",
+      "Set a history limit from 500 to 5,000 items and check storage use.",
+    ],
+  },
+  {
+    number: "04",
+    title: "Fits your Mac",
+    items: [
+      "A menu bar app with optional icon, system/light/dark appearance, and launch at login.",
+      "Choose the global shortcut: Option + V or Control + Option + V.",
+    ],
+  },
+];
+
+const screenshots = [
+  {
+    src: "history-panel.jpg",
+    alt: "ClipVault history panel with search, type filters, pinned items, and timestamps",
+    caption: "History, with search, filters, pins, and timestamps",
+  },
+  {
+    src: "settings.jpg",
+    alt: "ClipVault settings window with General and Clipboard sections",
+    caption: "Settings for general use, clipboard, storage, and privacy",
+  },
+  {
+    src: "menu-bar.jpg",
+    alt: "ClipVault menu bar menu with history, monitoring, settings, and quit actions",
+    caption: "A few useful actions, right in the menu bar",
+  },
+];
+
+const shortcuts = [
+  ["Option", "V", "Open history (configurable)"],
+  ["↑", "↓", "Move selection"],
+  ["Enter", "", "Restore the selected item to the clipboard"],
+  ["Esc", "", "Close the panel"],
+  ["⌘", "F", "Focus search"],
+  ["Delete", "", "Remove the selected item"],
+];
+---
+
+<SiteLayout>
+  <nav
+    aria-label="Primary navigation"
+    class="sticky top-2 z-50 mx-auto mt-2 w-[calc(100%-1rem)] max-w-6xl rounded-full border border-black/[0.07] bg-white/80 shadow-[0_8px_28px_rgba(17,18,23,0.06)] backdrop-blur-xl sm:top-3 sm:mt-3 sm:w-[calc(100%-2rem)]"
+  >
+    <div class="mx-auto flex min-h-14 max-w-6xl items-center gap-2 px-3 sm:min-h-16 sm:gap-5 sm:px-5">
+      <a href="#top" class="flex shrink-0 items-center gap-2.5 text-[15px] font-semibold tracking-[-0.04em] no-underline sm:text-base">
+        <img src={asset("icon.png")} alt="" width="28" height="28" class="size-7 rounded-lg" />
+        <span>ClipVault</span>
+      </a>
+
+      <div class="ml-auto hidden items-center gap-6 md:flex">
+        <a class="text-[13px] font-medium text-ink/65 no-underline transition-colors hover:text-accent" href="#features">Features</a>
+        <a class="text-[13px] font-medium text-ink/65 no-underline transition-colors hover:text-accent" href="#screenshots">Screenshots</a>
+        <a class="text-[13px] font-medium text-ink/65 no-underline transition-colors hover:text-accent" href="#privacy">Privacy</a>
+        <a class="text-[13px] font-medium text-ink/65 no-underline transition-colors hover:text-accent" href="#install">Install</a>
+      </div>
+
+      <details class="group relative ml-auto md:hidden" data-mobile-menu>
+        <summary
+          aria-label="Toggle site navigation"
+          class="grid size-11 cursor-pointer place-items-center rounded-full text-ink transition-colors hover:bg-black/5 focus-visible:outline-offset-2"
+        >
+          <svg class="group-open:hidden" aria-hidden="true" viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+          <svg class="hidden group-open:block" aria-hidden="true" viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <path d="m6 6 12 12M18 6 6 18" />
+          </svg>
+        </summary>
+        <div class="absolute right-0 top-[calc(100%+0.65rem)] z-50 grid min-w-48 gap-1 rounded-2xl border border-black/[0.07] bg-white p-2 shadow-xl">
+          <a data-mobile-nav href="#features" class="rounded-xl px-4 py-3 text-sm font-medium no-underline hover:bg-paper">Features</a>
+          <a data-mobile-nav href="#screenshots" class="rounded-xl px-4 py-3 text-sm font-medium no-underline hover:bg-paper">Screenshots</a>
+          <a data-mobile-nav href="#privacy" class="rounded-xl px-4 py-3 text-sm font-medium no-underline hover:bg-paper">Privacy</a>
+          <a data-mobile-nav href="#install" class="rounded-xl px-4 py-3 text-sm font-medium no-underline hover:bg-paper">Install</a>
+        </div>
+      </details>
+
+      <a
+        href={github}
+        class="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-full bg-ink px-4 text-[12px] font-semibold text-white no-underline shadow-md shadow-ink/15 transition hover:-translate-y-0.5 hover:bg-ink/90 active:translate-y-0 sm:min-h-11 sm:px-5 sm:text-[13px]"
+      >
+        <svg aria-hidden="true" viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" /></svg>
+        <span class="hidden min-[370px]:inline">View on GitHub</span>
+        <span class="min-[370px]:hidden">GitHub</span>
+      </a>
+    </div>
+  </nav>
+
+  <main id="main">
+    <header id="top" class="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-14 pt-16 sm:px-8 sm:pb-20 sm:pt-24 lg:grid-cols-[0.92fr_1.08fr] lg:gap-10 lg:px-8 lg:pb-24 lg:pt-24">
+      <div class="mx-auto max-w-xl text-center lg:mx-0 lg:text-left">
+        <span class="inline-flex items-center gap-2 rounded-full border border-black/[0.07] bg-white/80 px-3.5 py-2 text-[11px] font-semibold text-ink/75 shadow-sm sm:text-xs">
+          <span class="size-2 rounded-full bg-mint shadow-[0_0_0_3px_rgba(40,168,120,0.13)]"></span>
+          Free and open source <span class="text-ink/30">·</span> MIT license
+        </span>
+        <h1 class="mt-6 text-[clamp(3rem,8.4vw,6.55rem)] font-semibold leading-[0.98] tracking-[-0.078em] text-ink">
+          Everything you copy,<br class="hidden sm:block" /> <span class="text-ink/45">remembered.</span>
+        </h1>
+        <p class="mx-auto mt-6 max-w-[38rem] text-[15px] leading-7 tracking-[-0.015em] text-muted sm:text-lg sm:leading-8 lg:mx-0">
+          ClipVault keeps your clipboard history searchable from the menu bar. No account, no sync, no analytics, no network. Just the things you copied, ready when you need them.
+        </p>
+        <div class="mx-auto mt-7 flex max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center lg:justify-start">
+          <a href={github} class="inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-ink px-6 text-sm font-semibold text-white no-underline shadow-[0_10px_26px_rgba(17,18,23,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_15px_32px_rgba(17,18,23,0.24)] active:translate-y-0">
+            Get the source <span aria-hidden="true" class="grid size-6 place-items-center rounded-full bg-white/15 text-base">→</span>
+          </a>
+          <a href="#install" class="inline-flex min-h-12 items-center justify-center rounded-full border border-line bg-white/75 px-6 text-sm font-semibold text-ink no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-accent/30 hover:bg-white active:translate-y-0">
+            Build from source
+          </a>
+        </div>
+        <p class="mt-4 text-xs tracking-wide text-faint sm:text-[13px]">macOS 14 or later <span class="mx-1 text-ink/25">·</span> Apple silicon <span class="mx-1 text-ink/25">·</span> Swift 6 <span class="mx-1 text-ink/25">·</span> MIT</p>
+      </div>
+
+      <div class="relative mx-auto w-full max-w-2xl lg:pl-4">
+        <MotionShowcase client:visible src={asset("history-panel.jpg")} alt="ClipVault history panel with search, type filters, pinned items, and relative timestamps" />
+        <div class="mx-auto mt-4 flex max-w-[620px] items-center justify-between gap-3 px-1 text-[11px] font-medium text-ink/50 sm:mt-5 sm:text-xs">
+          <span>Search. Find. Copy again.</span>
+          <span class="inline-flex items-center gap-1.5"><span class="size-1.5 rounded-full bg-mint"></span> Stays on your Mac</span>
+        </div>
+      </div>
+    </header>
+
+    <section id="why" aria-label="Why ClipVault" class="mx-auto grid max-w-6xl gap-3 px-5 pb-20 sm:grid-cols-2 sm:px-8 lg:grid-cols-4 lg:px-8 lg:pb-24">
+      {principles.map((item) => (
+        <article class="rounded-3xl border border-black/[0.055] bg-white/75 p-5 shadow-[0_8px_28px_rgba(17,18,23,0.045)] transition duration-200 hover:-translate-y-1 hover:border-accent/20 hover:shadow-[0_16px_34px_rgba(21,34,66,0.09)] sm:p-6">
+          <h2 class="text-[15px] font-semibold tracking-[-0.035em]">{item.title}</h2>
+          <p class="mt-2 text-[13px] leading-6 text-muted">{item.body}</p>
+        </article>
+      ))}
+    </section>
+
+    <section id="features" class="mx-auto max-w-6xl scroll-mt-20 px-5 pb-20 sm:px-8 lg:px-8 lg:pb-28">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">Made for your workflow</p>
+        <h2 class="mt-3 text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.06] tracking-[-0.065em]">Built for how you <span class="text-ink/45">actually copy.</span></h2>
+      </div>
+      <div class="mt-9 grid gap-3 sm:grid-cols-2 lg:mt-12 lg:gap-4">
+        {features.map((feature) => (
+          <article class="rounded-[1.65rem] border border-black/[0.06] bg-white/80 p-6 shadow-[0_8px_28px_rgba(17,18,23,0.045)] transition duration-200 hover:-translate-y-1 hover:border-accent/20 hover:shadow-[0_16px_34px_rgba(21,34,66,0.09)] sm:p-7">
+            <h3 class="flex items-baseline gap-3 text-lg font-semibold tracking-[-0.045em]">
+              <span class="font-mono text-xs font-semibold text-accent">{feature.number}</span>{feature.title}
+            </h3>
+            <ul class="mt-3 space-y-2.5">
+              {feature.items.map((item) => (
+                <li class="relative pl-5 text-[13px] leading-6 text-muted before:absolute before:left-1 before:top-[0.7rem] before:size-1.5 before:rounded-full before:bg-accent">{item}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="screenshots" class="mx-auto max-w-6xl scroll-mt-20 px-5 pb-20 sm:px-8 lg:px-8 lg:pb-28">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">A closer look</p>
+        <h2 class="mt-3 text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.06] tracking-[-0.065em]">Quiet by default.<br class="sm:hidden" /> <span class="text-ink/45">There when you need it.</span></h2>
+      </div>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:mt-11 lg:grid-cols-3">
+        {screenshots.map((shot) => (
+          <figure class="overflow-hidden rounded-2xl border border-black/[0.07] bg-white shadow-[0_12px_34px_rgba(17,18,23,0.08)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_24px_54px_rgba(28,34,55,0.16)]">
+            <img src={asset(shot.src)} alt={shot.alt} loading="lazy" decoding="async" class="aspect-[1.28] w-full bg-[#e9eaf0] object-cover object-top" />
+            <figcaption class="border-t border-black/[0.04] px-4 py-3 text-xs font-medium leading-5 text-ink/65 sm:px-5 sm:py-4">{shot.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <section id="shortcuts" class="mx-auto max-w-6xl scroll-mt-20 px-5 pb-20 sm:px-8 lg:px-8 lg:pb-28">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">Keyboard shortcuts</p>
+        <h2 class="mt-3 text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.06] tracking-[-0.065em]">Keep your hands <span class="text-ink/45">on the keyboard.</span></h2>
+      </div>
+      <div class="mx-auto mt-8 max-w-2xl overflow-hidden rounded-3xl border border-line bg-white/85 shadow-[0_8px_28px_rgba(17,18,23,0.05)] sm:mt-10">
+        {shortcuts.map(([first, second, action], index) => (
+          <div class:list={["flex min-h-[58px] flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3 text-[13px] text-ink/70 sm:px-6", index > 0 && "border-t border-black/[0.06]"]}>
+            <span class="flex shrink-0 items-center gap-1.5 font-mono text-[11px] font-semibold text-ink">
+              <kbd class="rounded-md border border-black/15 border-b-2 bg-white px-2 py-1 shadow-sm">{first}</kbd>
+              {second && <kbd class="rounded-md border border-black/15 border-b-2 bg-white px-2 py-1 shadow-sm">{second}</kbd>}
+            </span>
+            <span class="min-w-0 text-right">{action}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section id="privacy" class="mx-auto max-w-6xl scroll-mt-20 px-5 pb-20 sm:px-8 lg:px-8 lg:pb-28">
+      <div class="overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(ellipse_at_14%_0%,rgba(73,122,255,0.3),transparent_44%),linear-gradient(145deg,#11131b,#171923_68%,#151722)] px-5 py-12 text-center text-[#f3f5fb] shadow-[0_24px_58px_rgba(12,17,34,0.2)] sm:px-10 sm:py-16">
+        <div class="mx-auto grid size-14 place-items-center rounded-2xl border border-blue-300/25 bg-blue-500/15 text-blue-200">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /><circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none" /></svg>
+        </div>
+        <h2 class="mx-auto mt-5 max-w-2xl text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.06] tracking-[-0.065em] text-white">Your data stays <span class="text-white/45">on your Mac.</span></h2>
+        <p class="mx-auto mt-4 max-w-2xl text-sm leading-7 text-white/70">SQLite holds history metadata; images and other binary content are stored as local files under <code class="break-all rounded-md bg-white/10 px-1.5 py-0.5 font-mono text-[0.83em] text-blue-100">~/Library/Application Support/ClipVault/</code>. Files get owner-only permissions, and clipboard contents are never logged.</p>
+        <div class="mt-7 flex flex-wrap justify-center gap-2">
+          {[
+            "No account",
+            "No sync",
+            "No analytics",
+            "No network requests",
+          ].map((point) => (
+            <span class="rounded-full border border-blue-200/25 px-3.5 py-1.5 text-[11px] font-semibold text-blue-100 sm:text-xs">{point}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="install" class="mx-auto max-w-6xl scroll-mt-20 px-5 pb-20 sm:px-8 lg:px-8 lg:pb-28">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">Install</p>
+        <h2 class="mt-3 text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.06] tracking-[-0.065em]">Build it <span class="text-ink/45">from source.</span></h2>
+      </div>
+      <div class="mt-8 grid items-center gap-7 lg:mt-11 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
+        <div class="overflow-hidden rounded-2xl border border-white/10 bg-[#12131a] shadow-[0_22px_54px_rgba(11,11,15,0.2)]">
+          <div class="flex gap-1.5 bg-white/[0.045] px-4 py-3" aria-hidden="true"><span class="size-2.5 rounded-full bg-[#ff5f57]"></span><span class="size-2.5 rounded-full bg-[#febc2e]"></span><span class="size-2.5 rounded-full bg-[#28c840]"></span></div>
+          <pre class="overflow-x-auto px-4 py-5 font-mono text-[11px] leading-7 text-blue-100 sm:px-6 sm:text-xs"><code>$ git clone https://github.com/ashinxavier/clipvault
+$ cd clipvault
+$ bash Scripts/package-dmg.sh</code></pre>
+        </div>
+        <div class="text-[13px] leading-6 text-ink/70">
+          <p>Open <code class="rounded-md bg-black/5 px-1.5 py-0.5 font-mono text-[0.84em]">build/ClipVault.dmg</code> and drag <code class="rounded-md bg-black/5 px-1.5 py-0.5 font-mono text-[0.84em]">ClipVault.app</code> to Applications.</p>
+          <p class="mt-3">The package is ad-hoc signed, so macOS may block it on first launch. After that first attempt, open <strong>System Settings → Privacy &amp; Security</strong> and choose <strong>Open Anyway</strong>.</p>
+          <p class="mt-3 text-xs leading-5 text-faint">Requires macOS 14 or later on Apple silicon, Apple Command Line Tools with Swift 6.3.3, and a compatible macOS SDK.</p>
+          <a href={github} class="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-ink px-5 text-[13px] font-semibold text-white no-underline shadow-md transition hover:-translate-y-0.5 hover:bg-ink/90">
+            Open the repository <span aria-hidden="true" class="text-base">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-black/[0.07]">
+    <div class="mx-auto flex max-w-6xl flex-col items-center gap-3 px-5 py-10 text-center sm:px-8 sm:py-12">
+      <a href="#top" class="flex items-center gap-2 text-sm font-semibold tracking-[-0.035em] no-underline">
+        <img src={asset("icon.png")} alt="" width="25" height="25" class="size-6 rounded-lg" /> ClipVault
+      </a>
+      <p class="max-w-md text-xs leading-5 text-ink/55">A local-first clipboard manager for macOS. Free and open source under the MIT license.</p>
+      <a class="text-xs font-semibold text-accent no-underline hover:underline" href={github}>github.com/ashinxavier/clipvault</a>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll<HTMLAnchorElement>("[data-mobile-nav]").forEach((link) => {
+      link.addEventListener("click", () => {
+        link.closest("details")?.removeAttribute("open");
+      });
+    });
+  </script>
+</SiteLayout>
